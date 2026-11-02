@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Barang Keluar{% endblock %}
+{% block page_title %}Barang Keluar{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Barang Keluar</li>{% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- Form -->
+  <div class="col-lg-4">
+    <div class="card card-warning">
+      <div class="card-header"><h3 class="card-title"><i class="fas fa-arrow-circle-up mr-1"></i> Catat Barang Keluar</h3></div>
+      <form method="post">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="id_sparepart">Sparepart</label>
+            <select class="form-control" id="id_sparepart" name="id_sparepart" required>
+              {% for d in daftar_sp %}
+              <option value="{{ d.id_sparepart }}">{{ d.kode }} - {{ d.nama }} (stok: {{ d.stok }} {{ d.satuan }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="jumlah">Jumlah</label>
+            <input type="number" class="form-control" id="jumlah" name="jumlah" min="1" required>
+          </div>
+          <div class="form-group">
+            <label for="tanggal_keluar">Tanggal Keluar</label>
+            <input type="date" class="form-control" id="tanggal_keluar" name="tanggal_keluar" value="{{ hari_ini }}" required>
+          </div>
+          <div class="form-group">
+            <label for="tujuan">Tujuan / Pelanggan</label>
+            <input type="text" class="form-control" id="tujuan" name="tujuan" placeholder="Contoh: Bengkel Jaya Motor">
+          </div>
+          <div class="form-group">
+            <label for="keterangan">Keterangan</label>
+            <input type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Contoh: Penjualan / Servis armada">
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-warning btn-block"><i class="fas fa-save"></i> Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Riwayat -->
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">20 Barang Keluar Terakhir</h3></div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap">
+          <thead>
+            <tr><th>Tanggal</th><th>Sparepart</th><th>Jumlah</th><th>Tujuan</th>
+                <th>Keterangan</th><th>Petugas</th></tr>
+          </thead>
+          <tbody>
+            {% for t in riwayat %}
+            <tr>
+              <td>{{ t.tanggal_keluar.strftime('%d-%m-%Y') }}</td>
+              <td>{{ t.sparepart }}</td>
+              <td><span class="badge badge-warning">-{{ t.jumlah }} {{ t.satuan }}</span></td>
+              <td>{{ t.tujuan or '-' }}</td>
+              <td>{{ t.keterangan or '-' }}</td>
+              <td>{{ t.petugas }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" class="text-center text-muted p-4">Belum ada data.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

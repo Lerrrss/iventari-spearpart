@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}{{ judul }}{% endblock %}
+{% block page_title %}{{ judul }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item">Laporan</li>
+<li class="breadcrumb-item active">{{ judul }}</li>
+{% endblock %}
+
+{% block content %}
+<!-- Pilih jenis laporan -->
+<ul class="nav nav-pills mb-3 no-print">
+  <li class="nav-item"><a class="nav-link {{ 'active' if jenis == 'stok' }}" href="{{ url_for('laporan', jenis='stok') }}">Stok Barang</a></li>
+  <li class="nav-item"><a class="nav-link {{ 'active' if jenis == 'masuk' }}" href="{{ url_for('laporan', jenis='masuk') }}">Barang Masuk</a></li>
+  <li class="nav-item"><a class="nav-link {{ 'active' if jenis == 'keluar' }}" href="{{ url_for('laporan', jenis='keluar') }}">Barang Keluar</a></li>
+  <li class="nav-item"><a class="nav-link {{ 'active' if jenis == 'mutasi' }}" href="{{ url_for('laporan', jenis='mutasi') }}">Rekap Mutasi</a></li>
+</ul>
+
+{% if ada_tanggal %}
+<div class="card card-outline card-primary no-print">
+  <div class="card-body">
+    <form method="get" class="form-inline">
+      <label class="mr-2">Periode:</label>
+      <input type="date" name="dari" value="{{ dari }}" class="form-control mr-2" required>
+      <span class="mr-2">s/d</span>
+      <input type="date" name="sampai" value="{{ sampai }}" class="form-control mr-2" required>
+      <button type="submit" class="btn btn-primary mr-2"><i class="fas fa-filter"></i> Filter</button>
+      <a href="{{ url_for('laporan', jenis=jenis) }}" class="btn btn-default">Reset</a>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      {{ judul }}
+      {% if dari and sampai and ada_tanggal %}
+        <small class="text-muted">&middot; {{ dari }} s/d {{ sampai }}</small>
+      {% endif %}
+    </h3>
+    <div class="card-tools no-print">
+      <button type="button" class="btn btn-default btn-sm" onclick="window.print()">
+        <i class="fas fa-print"></i> Cetak
+      </button>
+    </div>
+  </div>
+  <div class="card-body table-responsive p-0">
+    <table class="table table-striped table-hover text-nowrap">
+      <thead>
+        <tr>
+          {% for k in kolom %}<th>{{ k.replace('_', ' ')|title }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in data %}
+        <tr>
+          {% for k in kolom %}
+          <td>
+            {% if row[k] == 'MENIPIS' %}
+              <span class="badge badge-danger">MENIPIS</span>
+            {% elif row[k] == 'AMAN' %}
+              <span class="badge badge-success">AMAN</span>
+            {% elif row[k] is none %}
+              -
+            {% else %}
+              {{ row[k] }}
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% else %}
+        <tr><td class="text-center text-muted p-4">Tidak ada data.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer text-muted">
+    Total baris: {{ data|length }}
+  </div>
+</div>
+{% endblock %}

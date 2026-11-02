@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ judul }}{% endblock %}
+{% block page_title %}{{ judul }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('supplier') }}">Supplier</a></li>
+<li class="breadcrumb-item active">{{ judul }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-7">
+    <div class="card card-primary">
+      <div class="card-header"><h3 class="card-title">Form Supplier</h3></div>
+      <form method="post">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="nama_supplier">Nama Supplier</label>
+            <input type="text" class="form-control" id="nama_supplier" name="nama_supplier" required
+                   value="{{ item.nama_supplier if item else '' }}">
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="kontak">Nama Kontak</label>
+                <input type="text" class="form-control" id="kontak" name="kontak"
+                       value="{{ item.kontak or '' if item else '' }}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="telepon">Telepon</label>
+                <input type="text" class="form-control" id="telepon" name="telepon"
+                       value="{{ item.telepon or '' if item else '' }}">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="kota">Kota</label>
+            <input type="text" class="form-control" id="kota" name="kota"
+                   value="{{ item.kota or '' if item else '' }}">
+          </div>
+          <div class="form-group">
+            <label for="alamat">Alamat</label>
+            <input type="text" class="form-control" id="alamat" name="alamat"
+                   value="{{ item.alamat or '' if item else '' }}">
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
+          <a href="{{ url_for('supplier') }}" class="btn btn-default">Batal</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

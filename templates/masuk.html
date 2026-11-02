@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Barang Masuk{% endblock %}
+{% block page_title %}Barang Masuk{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Barang Masuk</li>{% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- Form -->
+  <div class="col-lg-4">
+    <div class="card card-success">
+      <div class="card-header"><h3 class="card-title"><i class="fas fa-arrow-circle-down mr-1"></i> Catat Barang Masuk</h3></div>
+      <form method="post">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="id_sparepart">Sparepart</label>
+            <select class="form-control" id="id_sparepart" name="id_sparepart" required>
+              {% for d in daftar_sp %}
+              <option value="{{ d.id_sparepart }}">{{ d.kode }} - {{ d.nama }} (stok: {{ d.stok }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="id_supplier">Supplier</label>
+            <select class="form-control" id="id_supplier" name="id_supplier" required>
+              {% for d in daftar_sup %}
+              <option value="{{ d.id_supplier }}">{{ d.nama_supplier }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="jumlah">Jumlah</label>
+            <input type="number" class="form-control" id="jumlah" name="jumlah" min="1" required>
+          </div>
+          <div class="form-group">
+            <label for="harga_beli">Harga Beli per Unit</label>
+            <div class="input-group">
+              <div class="input-group-prepend"><span class="input-group-text">Rp</span></div>
+              <input type="number" class="form-control" id="harga_beli" name="harga_beli" min="0" step="1" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="tanggal_masuk">Tanggal Masuk</label>
+            <input type="date" class="form-control" id="tanggal_masuk" name="tanggal_masuk" value="{{ hari_ini }}" required>
+          </div>
+          <div class="form-group">
+            <label for="no_faktur">No. Faktur</label>
+            <input type="text" class="form-control" id="no_faktur" name="no_faktur" placeholder="Contoh: INV-2001">
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-success btn-block"><i class="fas fa-save"></i> Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Riwayat -->
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">20 Barang Masuk Terakhir</h3></div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap">
+          <thead>
+            <tr><th>Tanggal</th><th>Faktur</th><th>Sparepart</th><th>Supplier</th>
+                <th>Jumlah</th><th>Harga Beli</th><th>Petugas</th></tr>
+          </thead>
+          <tbody>
+            {% for t in riwayat %}
+            <tr>
+              <td>{{ t.tanggal_masuk.strftime('%d-%m-%Y') }}</td>
+              <td>{{ t.no_faktur or '-' }}</td>
+              <td>{{ t.sparepart }}</td>
+              <td>{{ t.nama_supplier }}</td>
+              <td><span class="badge badge-success">+{{ t.jumlah }}</span></td>
+              <td>Rp {{ '{:,.0f}'.format(t.harga_beli).replace(',', '.') }}</td>
+              <td>{{ t.petugas }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="text-center text-muted p-4">Belum ada data.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

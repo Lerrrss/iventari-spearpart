@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}{{ judul }}{% endblock %}
+{% block page_title %}{{ judul }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('sparepart') }}">Sparepart</a></li>
+<li class="breadcrumb-item active">{{ judul }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-7">
+    <div class="card card-primary">
+      <div class="card-header"><h3 class="card-title">Form Sparepart</h3></div>
+      <form method="post">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="kode">Kode</label>
+            <input type="text" class="form-control" id="kode" name="kode" required
+                   value="{{ item.kode if item else '' }}">
+          </div>
+          <div class="form-group">
+            <label for="nama">Nama Sparepart</label>
+            <input type="text" class="form-control" id="nama" name="nama" required
+                   value="{{ item.nama if item else '' }}">
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="kategori">Kategori</label>
+                <input type="text" class="form-control" id="kategori" name="kategori"
+                       placeholder="Contoh: Rem, Filter, Mesin"
+                       value="{{ item.kategori or '' if item else '' }}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="satuan">Satuan</label>
+                <input type="text" class="form-control" id="satuan" name="satuan"
+                       value="{{ item.satuan if item else 'pcs' }}">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="harga_jual">Harga Jual</label>
+                <div class="input-group">
+                  <div class="input-group-prepend"><span class="input-group-text">Rp</span></div>
+                  <input type="number" class="form-control" id="harga_jual" name="harga_jual" min="0" step="1"
+                         value="{{ item.harga_jual|int if item else 0 }}">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="stok_minimum">Stok Minimum (batas peringatan)</label>
+                <input type="number" class="form-control" id="stok_minimum" name="stok_minimum" min="0"
+                       value="{{ item.stok_minimum if item else 5 }}">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lokasi_rak">Lokasi Rak</label>
+            <input type="text" class="form-control" id="lokasi_rak" name="lokasi_rak"
+                   value="{{ item.lokasi_rak or '' if item else '' }}">
+          </div>
+          <div class="callout callout-info mb-0">
+            <p class="mb-0">Stok tidak diisi di sini. Stok bertambah lewat menu <b>Barang Masuk</b>
+               dan berkurang lewat <b>Barang Keluar</b>.</p>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
+          <a href="{{ url_for('sparepart') }}" class="btn btn-default">Batal</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

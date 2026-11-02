@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Supplier{% endblock %}
+{% block page_title %}Data Supplier{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Supplier</li>{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <a href="{{ url_for('supplier_tambah') }}" class="btn btn-primary btn-sm">
+      <i class="fas fa-plus"></i> Tambah Supplier
+    </a>
+  </div>
+  <div class="card-body table-responsive p-0">
+    <table class="table table-hover text-nowrap">
+      <thead>
+        <tr>
+          <th>Nama Supplier</th><th>Kontak</th><th>Telepon</th><th>Kota</th>
+          <th>Alamat</th><th class="text-right">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in data %}
+        <tr>
+          <td>{{ s.nama_supplier }}</td>
+          <td>{{ s.kontak or '-' }}</td>
+          <td>{{ s.telepon or '-' }}</td>
+          <td>{{ s.kota or '-' }}</td>
+          <td>{{ s.alamat or '-' }}</td>
+          <td class="text-right">
+            <a href="{{ url_for('supplier_edit', id=s.id_supplier) }}" class="btn btn-warning btn-xs">
+              <i class="fas fa-edit"></i> Edit
+            </a>
+            <form method="post" action="{{ url_for('supplier_hapus', id=s.id_supplier) }}" class="d-inline"
+                  onsubmit="return confirm('Yakin hapus {{ s.nama_supplier }}?')">
+              <button type="submit" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i> Hapus</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center text-muted p-4">Belum ada data.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Sparepart{% endblock %}
+{% block page_title %}Data Sparepart{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Sparepart</li>{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <a href="{{ url_for('sparepart_tambah') }}" class="btn btn-primary btn-sm">
+      <i class="fas fa-plus"></i> Tambah Sparepart
+    </a>
+    <div class="card-tools">
+      <form method="get" class="input-group input-group-sm" style="width: 280px;">
+        <input type="text" name="q" value="{{ cari }}" class="form-control float-right" placeholder="Cari kode / nama / kategori">
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card-body table-responsive p-0">
+    <table class="table table-hover text-nowrap">
+      <thead>
+        <tr>
+          <th>Kode</th><th>Nama</th><th>Kategori</th><th>Stok</th>
+          <th>Harga Jual</th><th>Rak</th><th class="text-right">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in data %}
+        <tr>
+          <td>{{ s.kode }}</td>
+          <td>{{ s.nama }}</td>
+          <td>{{ s.kategori or '-' }}</td>
+          <td>
+            {% if s.stok <= s.stok_minimum %}
+              <span class="badge badge-danger">{{ s.stok }} {{ s.satuan }}</span>
+            {% else %}
+              <span class="badge badge-success">{{ s.stok }} {{ s.satuan }}</span>
+            {% endif %}
+          </td>
+          <td>Rp {{ '{:,.0f}'.format(s.harga_jual).replace(',', '.') }}</td>
+          <td>{{ s.lokasi_rak or '-' }}</td>
+          <td class="text-right">
+            <a href="{{ url_for('sparepart_edit', id=s.id_sparepart) }}" class="btn btn-warning btn-xs">
+              <i class="fas fa-edit"></i> Edit
+            </a>
+            <form method="post" action="{{ url_for('sparepart_hapus', id=s.id_sparepart) }}" class="d-inline"
+                  onsubmit="return confirm('Yakin hapus {{ s.nama }}?')">
+              <button type="submit" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i> Hapus</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted p-4">Belum ada data.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer text-muted">
+    Badge <span class="badge badge-danger">merah</span> = stok sudah di bawah atau sama dengan stok minimum.
+  </div>
+</div>
+{% endblock %}
